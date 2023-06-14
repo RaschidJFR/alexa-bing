@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "description": "alexa utility for quickly building skills",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +12,11 @@
   "dependencies": {
     "ask-sdk-core": "^2.7.0",
     "ask-sdk-model": "^1.19.0",
-    "aws-sdk": "^2.326.0"
+    "aws-sdk": "^2.326.0",
+    "bing-chat": "^0.2.3",
+    "dotenv-safe": "^8.2.0"
+  },
+  "devDependencies": {
+    "ask-sdk-local-debug": "^1.1.0"
   }
 }
