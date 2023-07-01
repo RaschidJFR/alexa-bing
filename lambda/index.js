@@ -11,32 +11,40 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Welcome, you can say Hello or Help. Which would you like to try?';
+        const speakOutput = 'What\'s your question to Bing?';
+        const repromptOutput = 'Anything you would like to ask Bing Chat?';
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(speakOutput)
+            .reprompt(repromptOutput)
             .getResponse();
     }
 };
 
-const HelloWorldIntentHandler = {
+/**
+ * @type Alexa.RequestHandler
+ */
+const QueryIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'QueryIntent';
     },
     async handle(handlerInput) {
         let speakOutput = "I do not know";
+        
         try {
-            speakOutput = await Bing.ask("what's up, dude?");
+            const query = handlerInput.requestEnvelope.request.intent.slots['query'].value;
+            const text = await Bing.ask(query);
+            speakOutput = 'Bing says: ' + text;
+            if(typeof text !== 'string') throw text;
         } catch (err) {
             console.error(err);
-            speakOutput = "I'm afraid I can't answer";
+            speakOutput = "Sorry, Bing is having troubles. Please try again.";
         }
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+            .reprompt('anything else?')
             .getResponse();
     }
 };
@@ -63,7 +71,8 @@ const CancelAndStopIntentHandler = {
                 || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
-        const speakOutput = 'Goodbye!';
+        forgetConversation();
+        const speakOutput = 'O.K. Closing Bing Chat';
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -104,25 +113,7 @@ const SessionEndedRequestHandler = {
         return handlerInput.responseBuilder.getResponse(); // notice we send an empty response
     }
 };
-/* *
- * The intent reflector is used for interaction model testing and debugging.
- * It will simply repeat the intent the user said. You can create custom handlers for your intents 
- * by defining them above, then also adding them to the request handler chain below 
- * */
-const IntentReflectorHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest';
-    },
-    handle(handlerInput) {
-        const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-        const speakOutput = `You just triggered ${intentName}`;
 
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-            .getResponse();
-    }
-};
 /**
  * Generic error handling to capture any syntax or routing errors. If you receive an error
  * stating the request handler chain is not found, you have not implemented a handler for
@@ -143,6 +134,10 @@ const ErrorHandler = {
     }
 };
 
+function forgetConversation() {
+    Bing.forgetConversation();
+}
+
 /**
  * This handler acts as the entry point for your skill, routing all request and response
  * payloads to the handlers above. Make sure any new handlers or interceptors you've
@@ -151,13 +146,12 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
-        HelloWorldIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
+        QueryIntentHandler,
         FallbackIntentHandler,
-        SessionEndedRequestHandler,
-        IntentReflectorHandler)
+        SessionEndedRequestHandler)
     .addErrorHandlers(
         ErrorHandler)
-    .withCustomUserAgent('sample/hello-world/v1.2')
+    .withCustomUserAgent('alexa-bing')
     .lambda();

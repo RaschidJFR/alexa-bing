@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
-    "postinstall": "(cd lambda; npm i)"
+    "postinstall": "(cd lambda; npm i)",
+    "start": "ask run & ask dialog"
   },
   "keywords": [
     "alexa",
