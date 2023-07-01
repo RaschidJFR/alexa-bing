@@ -1,19 +1,16 @@
 {
-  "name": "hello-world",
-  "version": "1.2.0",
-  "description": "alexa utility for quickly building skills",
+  "name": "alexa-bing-chat",
+  "version": "0.1.0",
+  "description": "Alexa integration with Bing Chat",
   "main": "index.js",
   "type": "commonjs",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Amazon Alexa",
+  "author": "Raschid JF Rafaelly",
   "license": "Apache License",
   "dependencies": {
     "ask-sdk-core": "^2.7.0",
     "ask-sdk-model": "^1.19.0",
     "aws-sdk": "^2.326.0",
-    "bing-chat": "^0.2.3"
+    "bing-chat": "git://github.com:RaschidJFR/bing-chat.git#v0.2.4-dev"
   },
   "devDependencies": {
     "ask-sdk-local-debug": "^1.1.0"
