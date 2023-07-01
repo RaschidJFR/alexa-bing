@@ -32,18 +32,16 @@
       "isAvailableWorldwide": true,
       "locales": {
         "en-US": {
-          "description": "Sample Full Description",
+          "description": "Use Alexa to ask Microsoft Bing chat bot",
           "examplePhrases": [
-            "Alexa open hello world",
-            "hello",
-            "help"
+            "Alexa open bing chat",
+            "bing chat"
           ],
           "keywords": [],
-          "name": "template nodejs",
-          "summary": "Sample Short Description"
+          "name": "Bing Chat",
+          "summary": "Use Alexa to interact with Microsoft Bing chat bot"
         }
-      },
-      "testingInstructions": "Sample Testing Instructions."
+      }
     }
   }
 }
